@@ -37,7 +37,7 @@ function getGithubRepos() {
 // handle loading and error states
 
 function App() {
-  const [repoList, setRepoList] = useState([]);
+  const [repoList, setRepoList] = useState(null);
   console.log("repolist: ", repoList);
 
   useEffect(() => {
@@ -51,26 +51,30 @@ function App() {
   }, []);
   return (
     <div>
-      <table>
-        <body>
-          <tr>
-            <th>Full Name</th>
-            <th>Stars</th>
-            <th>Link</th>
-          </tr>
-          {repoList.map((repo) => {
-            return (
-              <tr>
-                <td>{repo.full_name}</td>
-                <td>{repo.stargazers_count}</td>
-                <td>
-                  <a href={repo.html_url}>{repo.html_url}</a>
-                </td>
-              </tr>
-            );
-          })}
-        </body>
-      </table>
+      {repoList === null ? (
+        <div>Loading...</div>
+      ) : (
+        <table>
+          <body>
+            <tr>
+              <th>Full Name</th>
+              <th>Stars</th>
+              <th>Link</th>
+            </tr>
+            {repoList.map((repo) => {
+              return (
+                <tr>
+                  <td>{repo.full_name}</td>
+                  <td>{repo.stargazers_count}</td>
+                  <td>
+                    <a href={repo.html_url}>{repo.html_url}</a>
+                  </td>
+                </tr>
+              );
+            })}
+          </body>
+        </table>
+      )}
     </div>
   );
 }
