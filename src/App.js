@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import "./App.css";
 
 // as a user, I want to see all javascript repos with over 25k stars, srted by most to least order
@@ -35,6 +35,9 @@ function getGithubRepos() {
 
 // display data in some manner
 // handle loading and error states
+// catch handler
+// set the state to an empty array
+// check in our jsx and display that there's an error
 
 function App() {
   const [repoList, setRepoList] = useState(null);
@@ -44,16 +47,18 @@ function App() {
     getGithubRepos()
       .then((results) =>
         results.items.map(({ full_name, stargazers_count, html_url, id }) => {
+          // throw new Error("my error");
           return { full_name, stargazers_count, html_url, id };
         })
       )
-      .then((repoList) => setRepoList(repoList));
+      .then((repoList) => setRepoList(repoList))
+      .catch((err) => setRepoList([]));
   }, []);
   return (
     <div>
       {repoList === null ? (
         <div>Loading...</div>
-      ) : (
+      ) : repoList.length > 0 ? (
         <table>
           <body>
             <tr>
@@ -63,17 +68,21 @@ function App() {
             </tr>
             {repoList.map((repo) => {
               return (
-                <tr>
-                  <td>{repo.full_name}</td>
-                  <td>{repo.stargazers_count}</td>
-                  <td>
-                    <a href={repo.html_url}>{repo.html_url}</a>
-                  </td>
-                </tr>
+                <Fragment key={repo.id}>
+                  <tr>
+                    <td>{repo.full_name}</td>
+                    <td>{repo.stargazers_count}</td>
+                    <td>
+                      <a href={repo.html_url}>{repo.html_url}</a>
+                    </td>
+                  </tr>
+                </Fragment>
               );
             })}
           </body>
         </table>
+      ) : (
+        <div>Error lease try again</div>
       )}
     </div>
   );
