@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 // as a user, I want to see all javascript repos with over 25k stars, srted by most to least order
@@ -26,8 +26,6 @@ function getGithubRepos() {
   ).then((data) => data.json());
 }
 
-getGithubRepos();
-
 // make an api call on app load
 //useEffect - make api call
 
@@ -37,8 +35,17 @@ getGithubRepos();
 // handle loading and error states
 
 function App() {
+  const [repoList, setRepoList] = useState([]);
+
   useEffect(() => {
-    getGithubRepos().then((res) => console.log(res));
+    getGithubRepos().then((results) =>
+      results.items
+        .map(({ full_name, stargazers_count, html_url, id }) => {
+          console.log({ full_name, stargazers_count, html_url, id });
+          return { full_name, stargazers_count, html_url, id };
+        })
+        .then((repoList) => setRepoList(repoList))
+    );
   }, []);
   return <div>Hello</div>;
 }
