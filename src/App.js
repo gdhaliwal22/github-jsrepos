@@ -30,24 +30,49 @@ function getGithubRepos() {
 //useEffect - make api call
 
 // parse the data
+
 // set to state
+
 // display data in some manner
 // handle loading and error states
 
 function App() {
   const [repoList, setRepoList] = useState([]);
+  console.log("repolist: ", repoList);
 
   useEffect(() => {
-    getGithubRepos().then((results) =>
-      results.items
-        .map(({ full_name, stargazers_count, html_url, id }) => {
-          console.log({ full_name, stargazers_count, html_url, id });
+    getGithubRepos()
+      .then((results) =>
+        results.items.map(({ full_name, stargazers_count, html_url, id }) => {
           return { full_name, stargazers_count, html_url, id };
         })
-        .then((repoList) => setRepoList(repoList))
-    );
+      )
+      .then((repoList) => setRepoList(repoList));
   }, []);
-  return <div>Hello</div>;
+  return (
+    <div>
+      <table>
+        <body>
+          <tr>
+            <th>Full Name</th>
+            <th>Stars</th>
+            <th>Link</th>
+          </tr>
+          {repoList.map((repo) => {
+            return (
+              <tr>
+                <td>{repo.full_name}</td>
+                <td>{repo.stargazers_count}</td>
+                <td>
+                  <a href={repo.html_url}>{repo.html_url}</a>
+                </td>
+              </tr>
+            );
+          })}
+        </body>
+      </table>
+    </div>
+  );
 }
 
 export default App;
